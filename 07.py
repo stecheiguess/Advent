@@ -28,19 +28,19 @@ with open(FILE, "r") as file:
 
     lines = [l.split() for l in file.readlines()]
     total = 0
-    comp = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+    hands = {}
     rank = 1
 
-    for line in lines:
+    for l in lines:
         dic = {}
-        for c in line[0]:
+        for c in l[0]:
             dic[c] = dic.get(c, 0) + 1
 
-        comp[check(dic)].append((line[0], line[1]))
+        hands.setdefault(check(dic), []).append((l[0], l[1]))
 
-    for i in range(7):
-        byRank = sorted(comp[i], key=lambda word: [RANKING.index(c)
-                                                   for c in word[0]])
+    for i in range(len(hands)):
+        byRank = sorted(hands[i], key=lambda word: [RANKING.index(c)
+                                                    for c in word[0]])
 
         for j in byRank:
             total += int(j[1])*rank
@@ -56,25 +56,23 @@ RANKING = "J23456789TQKA"
 with open(FILE, "r") as file:
     lines = [l.split() for l in file.readlines()]
     total = 0
-    comp = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+    hands = {}
     rank = 1
 
-    for line in lines:
+    for l in lines:
         dic = {}
-        for c in line[0]:
+        for c in l[0]:
             dic[c] = dic.get(c, 0) + 1
 
-        if "J" in dic:
-            if dic["J"] != 5:
-                ans = dic.pop("J")
-                dic[max(dic, key=dic.get)] += ans
+        if "J" in dic and dic["J"] != 5:
+            ans = dic.pop("J")
+            dic[max(dic, key=dic.get)] += ans
 
-        comp[check(dic)].append((line[0], line[1]))
+        hands.setdefault(check(dic), []).append((l[0], l[1]))
 
-    for i in range(7):
-        byRank = sorted(comp[i], key=lambda word: [RANKING.index(c)
-                                                   for c in word[0]])
-
+    for i in range(len(hands)):
+        byRank = sorted(hands[i], key=lambda word: [RANKING.index(c)
+                                                    for c in word[0]])
         for j in byRank:
             total += int(j[1])*rank
             rank += 1
